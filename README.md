@@ -22,4 +22,20 @@ To get started run following commands step by step on your terminal.
       ```source venv/bin/activate``` (when on bash terminal on linux based OS)
       
       ```.\venv\Scripts\activate``` (when on windows powershell)
-   6. ``` 
+      
+   6. ``` pip install -r requirements.txt```
+   
+   7. ```python manage.py makemigrations```
+   
+   8. ```python manage.py migrate ```
+   
+   9. ```python manage.py createsuperuser```(enter id and password for admin user when prompted)
+   
+   10. ```python manage.py runserver```
+   
+After the server has sucessfully started go to http://localhost:8000/admin 
+
+login using id password you created on step 9 and start adding your category, questions, their options and marks per question.
+
+Then go to http://localhost:8000 and start answering your questions.
+   
