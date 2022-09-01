@@ -1,0 +1,91 @@
+
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Django Quiz App</title>
+  </head>
+  <body>
+    
+    <div id="app">
+        <div class="container mt-5 pt-5">
+            <div class="col-md-6 mx-auto">
+                <h3>Questions</h3>
+                <hr>
+                <div v-for="question in questions">
+                
+                <p>[[question.question]]</p>
+                
+                <div class="form-check" v-for="answer in question.answer">
+                    <input @change="checkAnswer($event, question.uid)" class="form-check-input" :value="answer.answer" type="radio" name="flexRadioDefault">
+                    <label class="form-check-label" for="flexRadioDefault1">
+                        [[answer.answer]]
+                    </label>
+                </div>
+                <hr>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+
+    <script>
+        var app = new Vue({
+            el: '#app',
+            delimiters: ['[[', ']]'],
+            data() {
+                return {
+                questions : []
+                }
+            },
+            methods : {
+                getQeustions(){
+                    var _this = this
+                    fetch(`http://localhost:8000/api/get-quiz/`)
+                    .then(response => response.json())
+                    .then(result =>{
+                        
+                        _this.questions = result.data
+                    })
+                },
+
+                checkAnswer(event,uid){
+                    var count =0
+                    this.questions.map(question =>{
+                        answers = question.answer
+                        len = answers.length
+                        for(var i=0; i < len; i++){
+                            if(answers[i].answer == event.target.value){
+                                if(answers[i].is_correct == true){
+                                    console.log(question.marks)
+                                    count = count + question.marks
+                                    alert("correct answer")
+                                }else{
+                                    
+                                    alert("oops! your answer is wrong")
+                                }
+                            }
+                        }
+                    })
+
+                    console.log(event.target.value, uid)
+                }
+            },
+            created() {
+                this.getQeustions()
+                console.log("Page Loaded")
+            },
+            });
+
+    </script>
+  </body>
+</html>
